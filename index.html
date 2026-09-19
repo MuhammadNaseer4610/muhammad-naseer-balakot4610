@@ -182,4 +182,61 @@
         }
     </script>
 </body>
-</html>
+</html><!-- HTML حصہ: پروگریس بار، ٹیکسٹ اور بٹنز -->
+<div id="statusText">گانا تیار کرنے کے لیے تیار ہے</div>
+<div style="width: 100%; background-color: #ddd; border-radius: 5px; margin: 10px 0;">
+  <div id="myProgressBar" style="width: 0%; height: 25px; background-color: #4CAF50; border-radius: 5px; text-align: center; color: white; line-height: 25px;">0%</div>
+</div>
+
+<!-- بٹنز (شروع میں ڈس ایبل یا چھپے ہوں گے) -->
+<button id="playBtn" disabled style="opacity: 0.5; cursor: not-allowed;">Play (چلائیں)</button>
+<button id="downloadBtn" disabled style="opacity: 0.5; cursor: not-allowed;">Download (ڈاؤن لوڈ)</button>
+
+<button onclick="startGeneration()">سپر پاور گانا جنریٹ کریں</button>
+
+<!-- JavaScript حصہ: اصلی اینیمیشن اور لاجک -->
+<script>
+  function startGeneration() {
+    const progressBar = document.getElementById('myProgressBar');
+    const statusText = document.getElementById('statusText');
+    const playBtn = document.getElementById('playBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    
+    let width = 0;
+    
+    // جنریشن شروع ہوتے ہی ٹیکسٹ تبدیل کریں
+    statusText.innerHTML = "آپ کا گانا جنریٹ کیا جا رہا ہے...";
+    
+    // بٹنز کو عارضی طور پر بند رکھیں
+    playBtn.disabled = true;
+    playBtn.style.opacity = "0.5";
+    playBtn.style.cursor = "not-allowed";
+    
+    downloadBtn.disabled = true;
+    downloadBtn.style.opacity = "0.5";
+    downloadBtn.style.cursor = "not-allowed";
+
+    let interval = setInterval(function() {
+      if (width >= 100) {
+        clearInterval(interval);
+        
+        // 100% ہونے پر کامیابی کا پیغام
+        statusText.innerHTML = "آپ کا گانا کامیابی کے साथ تیار کر دیا گیا है!";
+        
+        // اب پلے اور ڈاؤن لوڈ کے بٹنوں کو چالو (Enable) اور روشن کر دیں
+        playBtn.disabled = false;
+        playBtn.style.opacity = "1";
+        playBtn.style.cursor = "pointer";
+        
+        downloadBtn.disabled = false;
+        downloadBtn.style.opacity = "1";
+        downloadBtn.style.cursor = "pointer";
+        
+      } else {
+        width += 1; // رفتار بڑھانے یا گھٹانے کے لیے یہاں نمبر تبدیل کر سکتے ہیں
+        progressBar.style.width = width + '%';
+        progressBar.innerHTML = width + '%'; // پٹی کے اندر پرسنٹیج دکھانے کے لیے
+      }
+    }, 50); // جتنی کم ملی سیکنڈ ویلیو ہوگی، اتنی تیزی سے بار آگے بڑھے گی
+  }
+</script>
