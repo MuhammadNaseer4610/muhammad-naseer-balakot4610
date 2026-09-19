@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saghar AI Song Generator - دیوانِ ساغر AI</title>
+    <!-- Tailwind CSS for Super Power Responsive Design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for Urdu Nastaleeq Support -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Nastaliq Urdu', 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+        }
+        .glass-card {
+            background: rgba(30, 27, 75, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-6 md:p-10">
+
+    <div class="max-w-2xl mx-auto space-y-6">
+        
+        <!-- Header & Branding -->
+        <div class="text-center space-y-2">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-purple-600 to-pink-500 shadow-lg shadow-purple-500/30">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
+                </svg>
+            </div>
+            <h1 class="text-3xl sm:text-4xl font-bold tracking-tight bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                Saghar AI Music Studio
+            </h1>
+            <p class="text-lg text-purple-200">دیوانِ ساغر AI - سپر پاور میوزک جنریٹر</p>
+            <p class="text-sm text-gray-400">اپنا کلپ اپ لوڈ کریں، بول لکھیں، اور اے آئی کی مدد سے شاہکار گیت تیار کریں۔</p>
+        </div>
+
+        <!-- 1. Top File Upload Section -->
+        <div class="glass-card p-5 rounded-2xl shadow-xl space-y-3">
+            <label class="block text-sm font-semibold text-purple-300">📁 ریفرنس آڈیو/ویڈیو کلپ اپ لوڈ کریں (AI کو سکھانے کے لیے)</label>
+            <input type="file" id="audioFileInput" class="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-500 cursor-pointer">
+            <!-- Upload Progress Bar -->
+            <div id="uploadProgressContainer" class="hidden space-y-1">
+                <div class="flex justify-between text-xs text-purple-300">
+                    <span>کلپ اپ لوڈ ہو رہا ہے...</span>
+                    <span id="uploadPercent">0%</span>
+                </div>
+                <div class="w-full bg-gray-700 h-2 rounded-full overflow-hidden">
+                    <div id="uploadProgressBar" class="bg-gradient-to-r from-blue-500 to-purple-500 h-full w-0 transition-all duration-200"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Lyrics & Description Box -->
+        <div class="glass-card p-5 rounded-2xl shadow-xl space-y-3">
+            <div class="flex items-center space-x-2 space-x-reverse">
+                <span class="text-xl">✏️</span>
+                <label class="text-sm font-semibold text-purple-300">اپنا گانا یہاں پر لکھیں</label>
+            </div>
+            <textarea id="lyricsBox" rows="4" placeholder="اپنے شعر، بول یا گانے کی تفصیل یہاں اردو یا کسی بھی زبان میں ٹائپ کریں..." class="w-full bg-gray-900/60 border border-purple-500/30 rounded-xl p-4 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 text-base"></textarea>
+        </div>
+
+        <!-- 3. AI Voice Choice Strip -->
+        <div class="glass-card p-5 rounded-2xl shadow-xl space-y-3">
+            <label class="block text-sm font-semibold text-purple-300">🎙️ آواز منتخب کریں (Choose AI Voice)</label>
+            <select id="voiceSelect" class="w-full bg-gray-900/60 border border-purple-500/30 rounded-xl p-3 text-white focus:outline-none focus:border-purple-500">
+                <option value="match">پہلا فیچر: سیم اسی اورجنل انداز میں آواز کو بدلنا (Voice Style Matching)</option>
+                <option value="ai">دوسرا فیچر: خالص اے آئی (AI) کی دلکش آواز</option>
+                <option value="own">تیسرا فیچر: آپ کی اپنی آواز یا ریکارڈنگ کا انداز</option>
+            </select>
+        </div>
+
+        <!-- 4. Generate Button & Progress Bar -->
+        <div class="space-y-3">
+            <button onclick="startGeneration()" class="w-full py-4 rounded-2xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 font-bold text-lg shadow-lg shadow-purple-600/40 transition-all transform active:scale-95">
+                🎵 سپر پاور گانا جنریٹ کریں (Generate Song)
+            </button>
+
+            <!-- Generation Progress Bar -->
+            <div id="genProgressContainer" class="hidden glass-card p-4 rounded-xl space-y-2">
+                <div class="flex justify-between text-sm text-purple-300">
+                    <span id="genStatusText">اے آئی انجن گانا تیار کر رہا ہے...</span>
+                    <span id="genPercent">0%</span>
+                </div>
+                <div class="w-full bg-gray-700 h-3 rounded-full overflow-hidden">
+                    <div id="genProgressBar" class="bg-gradient-to-r from-pink-500 to-purple-500 h-full w-0 transition-all duration-300"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Play & Download Action Buttons (Initially Hidden) -->
+        <div id="actionButtons" class="hidden grid grid-cols-2 gap-4 pt-2">
+            <button onclick="playSong()" class="py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 font-semibold flex items-center justify-center space-x-2 space-x-reverse shadow-lg shadow-emerald-600/30 transition-all">
+                <span>▶️ پلے کریں (Play)</span>
+            </button>
+            <button onclick="downloadSong()" class="py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold flex items-center justify-center space-x-2 space-x-reverse shadow-lg shadow-blue-600/30 transition-all">
+                <span>📥 ڈاؤن لوڈ کریں (Download)</span>
+            </button>
+        </div>
+
+    </div>
+
+    <!-- JavaScript for Super Power Automation -->
+    <script>
+        // File Upload Simulation with Progress
+        document.getElementById('audioFileInput').addEventListener('change', function() {
+            if (this.files.length > 0) {
+                const container = document.getElementById('uploadProgressContainer');
+                const bar = document.getElementById('uploadProgressBar');
+                const percentText = document.getElementById('uploadPercent');
+                container.classList.remove('hidden');
+                
+                let progress = 0;
+                let interval = setInterval(() => {
+                    progress += 10;
+                    bar.style.width = progress + '%';
+                    percentText.innerText = progress + '%';
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        percentText.innerText = 'مکمل اپ لوڈ ہو گیا!';
+                    }
+                }, 150);
+            }
+        });
+
+        // AI Generation Simulation with Progress Bar
+        function startGeneration() {
+            const lyrics = document.getElementById('lyricsBox').value;
+            if(!lyrics.trim()) {
+                alert('براہ کرم پہلے اوپر خانے میں اپنے گانے کے بول یا تفصیل درج کریں!');
+                return;
+            }
+
+            const genContainer = document.getElementById('genProgressContainer');
+            const genBar = document.getElementById('genProgressBar');
+            const genPercent = document.getElementById('genPercent');
+            const statusText = document.getElementById('genStatusText');
+            const actionButtons = document.getElementById('actionButtons');
+
+            genContainer.classList.remove('hidden');
+            actionButtons.classList.add('hidden');
+            
+            let currentProgress = 0;
+            let genInterval = setInterval(() => {
+                currentProgress += 5;
+                genBar.style.width = currentProgress + '%';
+                genPercent.innerText = currentProgress + '%';
+
+                if (currentProgress == 30) {
+                    statusText.innerText = 'آواز کی ترتیب اور تال سیٹ کی جا रही ہے...';
+                } else if (currentProgress == 70) {
+                    statusText.innerText = 'اے آئی سنگنگ اور ماسٹرنگ ہو رہی ہے...';
+                }
+
+                if (currentProgress >= 100) {
+                    clearInterval(genInterval);
+                    statusText.innerText = 'گانا کامیابی کے ساتھ تیار ہو گیا ہے!';
+                    actionButtons.classList.remove('hidden');
+                }
+            }, 100);
+        }
+
+        function playSong() {
+            alert('سپر پاور اے آئی میوزک پلیئر: گانا پلے ہو رہا ہے...');
+        }
+
+        function downloadSong() {
+            // Simulated automatic download to disk/hard drive
+            const element = document.createElement('a');
+            const file = new Blob([document.getElementById('lyricsBox').value], {type: 'text/plain'});
+            element.href = URL.createObjectURL(file);
+            element.download = "Saghar-AI-Masterpiece.txt";
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+            alert('گانا کامیابی کے ساتھ آپ کی ڈسک / ہارڈ ڈرائیو میں ڈاؤن لوڈ ہو چکا ہے!');
+        }
+    </script>
+</body>
+</html>
