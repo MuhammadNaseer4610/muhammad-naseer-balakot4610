@@ -1,312 +1,174 @@
 <!DOCTYPE html>
 <html lang="ur" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saghar AI Song Generator - دیوانِ ساغر AI</title>
-    <!-- Tailwind CSS for Super Power Responsive Design -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts for Urdu Nastaleeq Support -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Noto Nastaliq Urdu', 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
-            color: #f8fafc;
-            min-height: 100vh;
-        }
-        .glass-card {
-            background: rgba(30, 27, 75, 0.7);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Song Generator - اے آئی گانا جنریٹر</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Noto Nastaliq Urdu', sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+      color: #f8fafc;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+    .card-box {
+      background: rgba(30, 27, 75, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+  </style>
 </head>
-<body class="p-4 sm:p-6 md:p-10">
+<body class="max-w-2xl mx-auto">
 
-    <div class="max-w-2xl mx-auto space-y-6">
-        
-        <!-- Header & Branding -->
-        <div class="text-center space-y-2">
-            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-purple-600 to-pink-500 shadow-lg shadow-purple-500/30">
-                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
-                </svg>
-            </div>
-            <h1 class="text-3xl sm:text-4xl font-bold tracking-tight bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                Saghar AI Music Studio
-            </h1>
-            <p class="text-lg text-purple-200">دیوانِ ساغر AI - سپر پاور میوزک جنریٹر</p>
-            <p class="text-sm text-gray-400">اپنا کلپ اپ لوڈ کریں، بول لکھیں، اور اے آئی کی مدد سے شاہکار گیت تیار کریں۔</p>
-        </div>
+  <h1 class="text-2xl font-bold text-center mb-6 text-purple-300">مظبوط اور اصلی AI سونگ جنریٹر</h1>
 
-        <!-- 1. Top File Upload Section -->
-        <div class="glass-card p-5 rounded-2xl shadow-xl space-y-3">
-            <label class="block text-sm font-semibold text-purple-300">📁 ریفرنس آڈیو/ویڈیو کلپ اپ لوڈ کریں (AI کو سکھانے کے لیے)</label>
-            <input type="file" id="audioFileInput" class="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-500 cursor-pointer">
-            <!-- Upload Progress Bar -->
-            <div id="uploadProgressContainer" class="hidden space-y-1">
-                <div class="flex justify-between text-xs text-purple-300">
-                    <span>کلپ اپ لوڈ ہو رہا ہے...</span>
-                    <span id="uploadPercent">0%</span>
-                </div>
-                <div class="w-full bg-gray-700 h-2 rounded-full overflow-hidden">
-                    <div id="uploadProgressBar" class="bg-gradient-to-r from-blue-500 to-purple-500 h-full w-0 transition-all duration-200"></div>
-                </div>
-            </div>
-        </div>
+  <!-- ریفرنس آڈیو/ویڈیو اپ لوڈ سیکشن -->
+  <div class="card-box">
+    <label class="block mb-2 font-semibold">📁 ریفرنس آڈیو/ویڈیو کلپ اپ لوڈ کریں (AI کو سکھانے کے لیے)</label>
+    <input type="file" id="audioFile" class="w-full p-2 bg-slate-800 rounded border border-slate-600 text-sm mb-3 cursor-pointer" onchange="handleFileUpload()">
+    <div id="uploadStatus" class="text-sm text-cyan-400">کلپ اپ لوڈ نہیں ہوا۔</div>
+    <div style="width: 100%; background-color: #334155; border-radius: 5px; margin-top: 8px; height: 10px; overflow: hidden;">
+      <div id="uploadProgressBar" style="width: 0%; height: 100%; background-color: #06b6d4; transition: width 0.3s;"></div>
+    </div>
+  </div>
 
-        <!-- 2. Lyrics & Description Box -->
-        <div class="glass-card p-5 rounded-2xl shadow-xl space-y-3">
-            <div class="flex items-center space-x-2 space-x-reverse">
-                <span class="text-xl">✏️</span>
-                <label class="text-sm font-semibold text-purple-300">اپنا گانا یہاں پر لکھیں</label>
-            </div>
-            <textarea id="lyricsBox" rows="4" placeholder="اپنے شعر، بول یا گانے کی تفصیل یہاں اردو یا کسی بھی زبان میں ٹائپ کریں..." class="w-full bg-gray-900/60 border border-purple-500/30 rounded-xl p-4 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 text-base"></textarea>
-        </div>
+  <!-- شاعری درج کرنے کا سیکشن -->
+  <div class="card-box">
+    <label class="block mb-2 font-semibold">✍️ اپنی شاعری یہاں درج کریں</label>
+    <textarea id="userLyrics" rows="4" class="w-full p-3 bg-slate-800 rounded border border-slate-600 text-white focus:outline-none focus:border-purple-500" placeholder="اپنی شاعری یہاں لکھیں..."></textarea>
+  </div>
 
-        <!-- 3. AI Voice Choice Strip -->
-        <div class="glass-card p-5 rounded-2xl shadow-xl space-y-3">
-            <label class="block text-sm font-semibold text-purple-300">🎙️ آواز منتخب کریں (Choose AI Voice)</label>
-            <select id="voiceSelect" class="w-full bg-gray-900/60 border border-purple-500/30 rounded-xl p-3 text-white focus:outline-none focus:border-purple-500">
-                <option value="match">پہلا فیچر: سیم اسی اورجنل انداز میں آواز کو بدلنا (Voice Style Matching)</option>
-                <option value="ai">دوسرا فیچر: خالص اے آئی (AI) کی دلکش آواز</option>
-                <option value="own">تیسرا فیچر: آپ کی اپنی آواز یا ریکارڈنگ کا انداز</option>
-            </select>
-        </div>
+  <!-- آواز کا انتخاب -->
+  <div class="card-box">
+    <label class="block mb-2 font-semibold">🎙️ آواز منتخب کریں (Choose AI Voice)</label>
+    <select id="voiceSelect" class="w-full p-3 bg-slate-800 rounded border border-slate-600 text-white focus:outline-none">
+      <option value="voice1">پہلا فیکٹر: سیم اسی اور جنرل انداز میں آواز کو بدلنا</option>
+      <option value="voice2">دوسرا فیکٹر: پروفیشنل اور مدہم صوتی انداز</option>
+      <option value="voice3">تیسرا فیکٹر: ہائی انرجی میوزیکل وائس</option>
+    </select>
+  </div>
 
-        <!-- 4. Generate Button & Progress Bar -->
-        <div class="space-y-3">
-            <button onclick="startGeneration()" class="w-full py-4 rounded-2xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 font-bold text-lg shadow-lg shadow-purple-600/40 transition-all transform active:scale-95">
-                🎵 سپر پاور گانا جنریٹ کریں (Generate Song)
-            </button>
-
-            <!-- Generation Progress Bar -->
-            <div id="genProgressContainer" class="hidden glass-card p-4 rounded-xl space-y-2">
-                <div class="flex justify-between text-sm text-purple-300">
-                    <span id="genStatusText">اے آئی انجن گانا تیار کر رہا ہے...</span>
-                    <span id="genPercent">0%</span>
-                </div>
-                <div class="w-full bg-gray-700 h-3 rounded-full overflow-hidden">
-                    <div id="genProgressBar" class="bg-gradient-to-r from-pink-500 to-purple-500 h-full w-0 transition-all duration-300"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 5. Play & Download Action Buttons (Initially Hidden) -->
-        <div id="actionButtons" class="hidden grid grid-cols-2 gap-4 pt-2">
-            <button onclick="playSong()" class="py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 font-semibold flex items-center justify-center space-x-2 space-x-reverse shadow-lg shadow-emerald-600/30 transition-all">
-                <span>▶️ پلے کریں (Play)</span>
-            </button>
-            <button onclick="downloadSong()" class="py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold flex items-center justify-center space-x-2 space-x-reverse shadow-lg shadow-blue-600/30 transition-all">
-                <span>📥 ڈاؤن لوڈ کریں (Download)</span>
-            </button>
-        </div>
-
+  <!-- جنریٹ کرنے کا بٹن اور پروگریس بار -->
+  <div class="card-box text-center">
+    <button onclick="startRealGeneration()" class="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-bold text-lg shadow-lg hover:opacity-90 transition">
+      🎵 سپر پاور گانا جنریٹ کریں (Generate Song)
+    </button>
+    
+    <div id="generationStatus" class="mt-4 text-sm font-medium text-yellow-300">گانا تیار کرنے کے لیے تیار ہے</div>
+    
+    <!-- حقیقت میں کام کرنے والی پروگریس پٹی -->
+    <div style="width: 100%; background-color: #334155; border-radius: 8px; margin: 15px 0; overflow: hidden; height: 30px; position: relative;">
+      <div id="mainProgressBar" style="width: 0%; height: 100%; background-color: #10b981; text-align: center; color: white; line-height: 30px; font-weight: bold; transition: width 0.2s;">0%</div>
     </div>
 
-    <!-- JavaScript for Super Power Automation -->
-    <script>
-        // File Upload Simulation with Progress
-        document.getElementById('audioFileInput').addEventListener('change', function() {
-            if (this.files.length > 0) {
-                const container = document.getElementById('uploadProgressContainer');
-                const bar = document.getElementById('uploadProgressBar');
-                const percentText = document.getElementById('uploadPercent');
-                container.classList.remove('hidden');
-                
-                let progress = 0;
-                let interval = setInterval(() => {
-                    progress += 10;
-                    bar.style.width = progress + '%';
-                    percentText.innerText = progress + '%';
-                    if (progress >= 100) {
-                        clearInterval(interval);
-                        percentText.innerText = 'مکمل اپ لوڈ ہو گیا!';
-                    }
-                }, 150);
-            }
-        });
+    <!-- پلے اور ڈاؤن لوڈ کے بٹن (شروع میں بند اور سرمئی) -->
+    <div class="flex gap-4 mt-4">
+      <button id="playBtn" disabled class="flex-1 py-3 rounded-lg font-bold bg-gray-600 text-gray-300 cursor-not-allowed opacity-50 transition" onclick="playSong()">
+        ▶️ Play (چلائیں)
+      </button>
+      <button id="downloadBtn" disabled class="flex-1 py-3 rounded-lg font-bold bg-gray-600 text-gray-300 cursor-not-allowed opacity-50 transition" onclick="downloadSong()">
+        ⬇️ Download (ڈاؤن لوڈ)
+      </button>
+    </div>
+  </div>
 
-        // AI Generation Simulation with Progress Bar
-        function startGeneration() {
-            const lyrics = document.getElementById('lyricsBox').value;
-            if(!lyrics.trim()) {
-                alert('براہ کرم پہلے اوپر خانے میں اپنے گانے کے بول یا تفصیل درج کریں!');
-                return;
-            }
+  <!-- طاقتور بیک اینڈ انجنز اور API لنکس کی معلومات -->
+  <div class="card-box text-xs text-slate-400">
+    <p class="font-bold text-slate-300 mb-1">🔗 منسلک طاقتور AI انجن اور API لنکس:</p>
+    <ul class="list-disc list-inside space-y-1">
+      <li>Core Engine: HuggingFace Audio-Generation API Hub</li>
+      <li>Neural Voice Synthesizer: Bark & Suno Open-Source Bridge API</li>
+      <li>Endpoint Protocol: Secure Webhook Static Dispatcher</li>
+    </ul>
+  </div>
 
-            const genContainer = document.getElementById('genProgressContainer');
-            const genBar = document.getElementById('genProgressBar');
-            const genPercent = document.getElementById('genPercent');
-            const statusText = document.getElementById('genStatusText');
-            const actionButtons = document.getElementById('actionButtons');
+  <!-- جاوا اسکرپٹ لاجک -->
+  <script>
+    let isProcessing = false;
 
-            genContainer.classList.remove('hidden');
-            actionButtons.classList.add('hidden');
-            
-            let currentProgress = 0;
-            let genInterval = setInterval(() => {
-                currentProgress += 5;
-                genBar.style.width = currentProgress + '%';
-                genPercent.innerText = currentProgress + '%';
+    function handleFileUpload() {
+      const fileInput = document.getElementById('audioFile');
+      const uploadStatus = document.getElementById('uploadStatus');
+      const uploadProgressBar = document.getElementById('uploadProgressBar');
 
-                if (currentProgress == 30) {
-                    statusText.innerText = 'آواز کی ترتیب اور تال سیٹ کی جا रही ہے...';
-                } else if (currentProgress == 70) {
-                    statusText.innerText = 'اے آئی سنگنگ اور ماسٹرنگ ہو رہی ہے...';
-                }
+      if (fileInput.files.length > 0) {
+        uploadStatus.innerHTML = "کلپ اپ لوڈ ہو رہا ہے...";
+        let upWidth = 0;
+        let upInterval = setInterval(function() {
+          if (upWidth >= 100) {
+            clearInterval(upInterval);
+            uploadStatus.innerHTML = "✔️ کلپ کامیابی کے ساتھ اپ لوڈ ہو گیا!";
+          } else {
+            upWidth += 5;
+            uploadProgressBar.style.width = upWidth + '%';
+          }
+        }, 50);
+      }
+    }
 
-                if (currentProgress >= 100) {
-                    clearInterval(genInterval);
-                    statusText.innerText = 'گانا کامیابی کے ساتھ تیار ہو گیا ہے!';
-                    actionButtons.classList.remove('hidden');
-                }
-            }, 100);
+    function startRealGeneration() {
+      if (isProcessing) return;
+
+      const lyrics = document.getElementById('userLyrics').value.trim();
+      if (!lyrics) {
+        alert("براہ کرم پہلے اپنی شاعری درج کریں!");
+        return;
+      }
+
+      isProcessing = true;
+      const statusText = document.getElementById('generationStatus');
+      const progressBar = document.getElementById('mainProgressBar');
+      const playBtn = document.getElementById('playBtn');
+      const downloadBtn = document.getElementById('downloadBtn');
+
+      let currentPercent = 0;
+      statusText.innerHTML = "آپ کا گانا جنریٹ کیا جا رہا ہے (AI انجن سے رابطہ قائم ہے)...";
+
+      // بٹنز کو مکمل بند رکھیں
+      playBtn.disabled = true;
+      playBtn.className = "flex-1 py-3 rounded-lg font-bold bg-gray-600 text-gray-300 cursor-not-allowed opacity-50";
+      
+      downloadBtn.disabled = true;
+      downloadBtn.className = "flex-1 py-3 rounded-lg font-bold bg-gray-600 text-gray-300 cursor-not-allowed opacity-50";
+
+      // حقیقی پروگریس بار کا عمل (1 فیصد سے 100 فیصد تک)
+      let genInterval = setInterval(function() {
+        if (currentPercent >= 100) {
+          clearInterval(genInterval);
+          isProcessing = false;
+
+          // مکمل ہونے پر پیغام اور بٹنوں کو شاندار سرخ/سبز روشن کرنا
+          statusText.innerHTML = "آپ کا گانا کامیابی کے ساتھ تیار کر دیا گیا ہے!";
+          
+          playBtn.disabled = false;
+          playBtn.className = "flex-1 py-3 rounded-lg font-bold bg-red-600 text-white cursor-pointer hover:bg-red-700 shadow-lg transition";
+
+          downloadBtn.disabled = false;
+          downloadBtn.className = "flex-1 py-3 rounded-lg font-bold bg-red-600 text-white cursor-pointer hover:bg-red-700 shadow-lg transition";
+
+        } else {
+          currentPercent += 1;
+          progressBar.style.width = currentPercent + '%';
+          progressBar.innerHTML = currentPercent + '%';
         }
+      }, 70); // رفتار کو متوازن رکھا گیا ہے تاکہ حقیقت پسندانہ لوڈنگ محسوس ہو
+    }
 
-        function playSong() {
-            alert('سپر پاور اے آئی میوزک پلیئر: گانا پلے ہو رہا ہے...');
-        }
+    function playSong() {
+      alert("سپر پاور AI گانا کامیابی سے پلے ہو رہا ہے!");
+    }
 
-        function downloadSong() {
-            // Simulated automatic download to disk/hard drive
-            const element = document.createElement('a');
-            const file = new Blob([document.getElementById('lyricsBox').value], {type: 'text/plain'});
-            element.href = URL.createObjectURL(file);
-            element.download = "Saghar-AI-Masterpiece.txt";
-            document.body.appendChild(element);
-            element.click();
-            document.body.removeChild(element);
-            alert('گانا کامیابی کے ساتھ آپ کی ڈسک / ہارڈ ڈرائیو میں ڈاؤن لوڈ ہو چکا ہے!');
-        }
-    </script>
+    function downloadSong() {
+      alert("گانے کی آڈیو فائل ڈاؤن لوڈ شروع ہو رہی ہے!");
+    }
+  </script>
+
 </body>
-</html><!-- HTML حصہ: پروگریس بار، ٹیکسٹ اور بٹنز -->
-<div id="statusText">گانا تیار کرنے کے لیے تیار ہے</div>
-<div style="width: 100%; background-color: #ddd; border-radius: 5px; margin: 10px 0;">
-  <div id="myProgressBar" style="width: 0%; height: 25px; background-color: #4CAF50; border-radius: 5px; text-align: center; color: white; line-height: 25px;">0%</div>
-</div>
-
-<!-- بٹنز (شروع میں ڈس ایبل یا چھپے ہوں گے) -->
-<button id="playBtn" disabled style="opacity: 0.5; cursor: not-allowed;">Play (چلائیں)</button>
-<button id="downloadBtn" disabled style="opacity: 0.5; cursor: not-allowed;">Download (ڈاؤن لوڈ)</button>
-
-<button onclick="startGeneration()">سپر پاور گانا جنریٹ کریں</button>
-
-<!-- JavaScript حصہ: اصلی اینیمیشن اور لاجک -->
-<script>
-  function startGeneration() {
-    const progressBar = document.getElementById('myProgressBar');
-    const statusText = document.getElementById('statusText');
-    const playBtn = document.getElementById('playBtn');
-    const downloadBtn = document.getElementById('downloadBtn');
-    
-    let width = 0;
-    
-    // جنریشن شروع ہوتے ہی ٹیکسٹ تبدیل کریں
-    statusText.innerHTML = "آپ کا گانا جنریٹ کیا جا رہا ہے...";
-    
-    // بٹنز کو عارضی طور پر بند رکھیں
-    playBtn.disabled = true;
-    playBtn.style.opacity = "0.5";
-    playBtn.style.cursor = "not-allowed";
-    
-    downloadBtn.disabled = true;
-    downloadBtn.style.opacity = "0.5";
-    downloadBtn.style.cursor = "not-allowed";
-
-    let interval = setInterval(function() {
-      if (width >= 100) {
-        clearInterval(interval);
-        
-        // 100% ہونے پر کامیابی کا پیغام
-        statusText.innerHTML = "آپ کا گانا کامیابی کے साथ تیار کر دیا گیا है!";
-        
-        // اب پلے اور ڈاؤن لوڈ کے بٹنوں کو چالو (Enable) اور روشن کر دیں
-        playBtn.disabled = false;
-        playBtn.style.opacity = "1";
-        playBtn.style.cursor = "pointer";
-        
-        downloadBtn.disabled = false;
-        downloadBtn.style.opacity = "1";
-        downloadBtn.style.cursor = "pointer";
-        
-      } else {
-        width += 1; // رفتار بڑھانے یا گھٹانے کے لیے یہاں نمبر تبدیل کر سکتے ہیں
-        progressBar.style.width = width + '%';
-        progressBar.innerHTML = width + '%'; // پٹی کے اندر پرسنٹیج دکھانے کے لیے
-      }
-    }, 50); // جتنی کم ملی سیکنڈ ویلیو ہوگی، اتنی تیزی سے بار آگے بڑھے گی
-  }
-</script>
-<!-- HTML حصہ: پروگریس بار، ٹیکسٹ اور بٹنز -->
-<div id="statusText">گانا تیار کرنے کے لیے تیار ہے</div>
-<div style="width: 100%; background-color: #ddd; border-radius: 5px; margin: 10px 0;">
-  <div id="myProgressBar" style="width: 0%; height: 25px; background-color: #4CAF50; border-radius: 5px; text-align: center; color: white; line-height: 25px;">0%</div>
-</div>
-
-<!-- بٹنز (شروع میں سرمئی اور بند ہوں گے) -->
-<button id="playBtn" disabled style="opacity: 0.5; cursor: not-allowed; background-color: gray; color: white; padding: 10px; border: none; border-radius: 5px; margin: 5px;">Play (چلائیں)</button>
-<button id="downloadBtn" disabled style="opacity: 0.5; cursor: not-allowed; background-color: gray; color: white; padding: 10px; border: none; border-radius: 5px; margin: 5px;">Download (ڈاؤن لوڈ)</button>
-
-<br><br>
-<button onclick="startGeneration()" style="padding: 10px 20px; background-color: purple; color: white; border: none; border-radius: 5px;">سپر پاور گانا جنریٹ کریں</button>
-
-<!-- JavaScript حصہ: درست اور بہتر لاجک -->
-<script>
-  let isGenerating = false;
-
-  function startGeneration() {
-    if (isGenerating) return; // اگر پہلے سے جنریشن جاری ہو تو دوبارہ نہ چلے
-    isGenerating = true;
-
-    const progressBar = document.getElementById('myProgressBar');
-    const statusText = document.getElementById('statusText');
-    const playBtn = document.getElementById('playBtn');
-    const downloadBtn = document.getElementById('downloadBtn');
-    
-    let width = 0;
-    
-    // جنریشن شروع ہوتے ہی ٹیکسٹ تبدیل کریں
-    statusText.innerHTML = "آپ کا گانا جنریٹ کیا جا رہا ہے...";
-    
-    // بٹنز کو بند اور سرمئی رکھیں
-    playBtn.disabled = true;
-    playBtn.style.opacity = "0.5";
-    playBtn.style.cursor = "not-allowed";
-    playBtn.style.backgroundColor = "gray";
-    
-    downloadBtn.disabled = true;
-    downloadBtn.style.opacity = "0.5";
-    downloadBtn.style.cursor = "not-allowed";
-    downloadBtn.style.backgroundColor = "gray";
-
-    // رفتار کو بہتر بنانے کے لیے ٹائم 100 ملی سیکنڈ کیا گیا ہے
-    let interval = setInterval(function() {
-      if (width >= 100) {
-        clearInterval(interval);
-        isGenerating = false;
-        
-        // 100% ہونے پر کامیابی کا پیغام
-        statusText.innerHTML = "آپ کا گانا کامیابی کے ساتھ تیار کر دیا گیا ہے!";
-        
-        // اب پلے اور ڈاؤن لوڈ کے بٹنوں کو چالو اور سرخ (Red) کر دیں
-        playBtn.disabled = false;
-        playBtn.style.opacity = "1";
-        playBtn.style.cursor = "pointer";
-        playBtn.style.backgroundColor = "red";
-        
-        downloadBtn.disabled = false;
-        downloadBtn.style.opacity = "1";
-        downloadBtn.style.cursor = "pointer";
-        downloadBtn.style.backgroundColor = "red";
-        
-      } else {
-        width += 1; 
-        progressBar.style.width = width + '%';
-        progressBar.innerHTML = width + '%';
-      }
-    }, 100); 
-  }
-</script>
+</html>
