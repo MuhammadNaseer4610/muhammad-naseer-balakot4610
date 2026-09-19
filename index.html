@@ -68,6 +68,12 @@
       <div id="mainProgressBar" style="width: 0%; height: 100%; background-color: #10b981; text-align: center; color: white; line-height: 30px; font-weight: bold; transition: width 0.2s;">0%</div>
     </div>
 
+    <!-- اصل آڈیو پلیئر (چھپا ہوا لیکن فنکشنل) -->
+    <audio id="songAudioPlayer" preload="auto">
+      <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+      آپ کا براؤزر آڈیو کو سپورٹ نہیں کرتا۔
+    </audio>
+
     <!-- پلے اور ڈاؤن لوڈ کے بٹن (شروع میں بند اور سرمئی) -->
     <div class="flex gap-4 mt-4">
       <button id="playBtn" disabled class="flex-1 py-3 rounded-lg font-bold bg-gray-600 text-gray-300 cursor-not-allowed opacity-50 transition" onclick="playSong()">
@@ -92,6 +98,7 @@
   <!-- جاوا اسکرپٹ لاجک -->
   <script>
     let isProcessing = false;
+    const audioPlayer = document.getElementById('songAudioPlayer');
 
     function handleFileUpload() {
       const fileInput = document.getElementById('audioFile');
@@ -144,7 +151,7 @@
           clearInterval(genInterval);
           isProcessing = false;
 
-          // مکمل ہونے پر پیغام اور بٹنوں کو شاندار سرخ/سبز روشن کرنا
+          // مکمل ہونے پر پیغام اور بٹنوں کو روشن کرنا
           statusText.innerHTML = "آپ کا گانا کامیابی کے ساتھ تیار کر دیا گیا ہے!";
           
           playBtn.disabled = false;
@@ -158,15 +165,28 @@
           progressBar.style.width = currentPercent + '%';
           progressBar.innerHTML = currentPercent + '%';
         }
-      }, 70); // رفتار کو متوازن رکھا گیا ہے تاکہ حقیقت پسندانہ لوڈنگ محسوس ہو
+      }, 50); 
     }
 
     function playSong() {
-      alert("سپر پاور AI گانا کامیابی سے پلے ہو رہا ہے!");
+      if (audioPlayer.paused) {
+        audioPlayer.play();
+        document.getElementById('playBtn').innerHTML = "⏸️ Pause (روکیں)";
+      } else {
+        audioPlayer.pause();
+        document.getElementById('playBtn').innerHTML = "▶️ Play (چلائیں)";
+      }
     }
 
     function downloadSong() {
-      alert("گانے کی آڈیو فائل ڈاؤن لوڈ شروع ہو رہی ہے!");
+      const audioSourceUrl = audioPlayer.querySelector('source').src;
+      const a = document.createElement('a');
+      a.href = audioSourceUrl;
+      a.download = 'AI_Generated_Song.mp3';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      alert("گانے کی آڈیو فائل کامیابی سے ڈاؤن لوڈ ہو گئی ہے!");
     }
   </script>
 
